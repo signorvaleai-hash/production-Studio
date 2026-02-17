@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIGNOR VALE Production Studio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <p class="eyebrow">SIGNOR VALE Production Studio</p>
+      <h1>Format once. Publish anywhere.</h1>
+      <p>Upload your manuscript, validate covers automatically, and download a production-ready package.</p>
+      <div class="pills" aria-hidden="true">
+        <span>KDP checks built in</span>
+        <span>Automatic cover correction</span>
+        <span>Production ZIP output</span>
+      </div>
+    </header>
+
+    <form id="formatForm" class="sheet">
+      <section class="row two">
+        <label>
+          Title
+          <input type="text" name="title" placeholder="My Novel" required>
+        </label>
+        <label>
+          Author
+          <input type="text" name="author" placeholder="Author Name" required>
+        </label>
+      </section>
+
+      <section class="row">
+        <label>
+          Manuscript (DOC/DOCX/KPF/EPUB/HTML/ZIP/TXT/RTF/PDF/MD)
+          <input type="file" name="manuscript" accept=".doc,.docx,.kpf,.epub,.html,.htm,.zip,.txt,.rtf,.pdf,.md" required>
+        </label>
+      </section>
+
+      <section class="row">
+        <h2>Output formats</h2>
+        <div class="list">
+          {% for profile in profiles %}
+          <label class="check">
+            <input type="checkbox" name="profiles" value="{{ profile.key }}" {% if profile.key in ['kindle_epub', 'docx_master'] %}checked{% endif %}>
+            <span>
+              <strong>{{ profile.label }}</strong>
+              <small>{{ profile.description }}</small>
+            </span>
+          </label>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="row">
+        <h2>Covers</h2>
+        <div class="two">
+          <label>
+            Front cover
+            <input type="file" name="front_cover" accept=".jpg,.jpeg,.png,.webp,.tif,.tiff">
+          </label>
+          <label>
+            Back cover
+            <input type="file" name="back_cover" accept=".jpg,.jpeg,.png,.webp,.tif,.tiff">
+          </label>
+        </div>
+        <label class="check auto-fix">
+          <input type="checkbox" name="auto_fix_covers" checked>
+          <span>
+            <strong>Auto-correct invalid covers to KDP spec</strong>
+            <small>Preview updates automatically when cover files change.</small>
+          </span>
+        </label>
+        <p id="previewStatus" class="micro">No cover uploaded yet.</p>
+
+        <div class="preview-grid" id="previewGrid">
+          <article class="preview-card" data-role="front">
+            <h3>Front</h3>
+            <img id="frontPreviewImg" class="preview-image" alt="Front cover preview" hidden>
+            <p id="frontPreviewMeta" class="preview-meta">Waiting for front cover.</p>
+          </article>
+          <article class="preview-card" data-role="back">
+            <h3>Back</h3>
+            <img id="backPreviewImg" class="preview-image" alt="Back cover preview" hidden>
+            <p id="backPreviewMeta" class="preview-meta">Waiting for back cover.</p>
+          </article>
+        </div>
+      </section>
+
+      <div class="actions">
+        <button id="submitBtn" type="submit">Generate package</button>
+      </div>
+    </form>
+
+    <section class="meta">
+      <p id="status" class="status">Ready.</p>
+      <p class="micro">Cover checks: JPEG/TIFF, RGB, 72 DPI, ratio >= 1.6:1, min 625x1000, max 10000x10000, under 50MB.</p>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+"""Manuscript formatting pipeline package."""
+
